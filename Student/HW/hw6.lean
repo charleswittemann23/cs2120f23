@@ -18,6 +18,12 @@ corresponding concrete English-language examples.
 /-! 
 ## Part 1: Inductive Types and Recursive Functions
 -/
+def first_elt : List Nat → Unit ⊕ Nat
+| [] => Sum.inl Unit.unit
+| h::_ => Sum.inr h
+
+#reduce first_elt []    -- expect Sum.inl unit
+#reduce first_elt [1,2] -- expect 1 (left)
 
 /-! 
 ### #1: Iterated Function Application 
@@ -50,8 +56,8 @@ natural number, *n'*.
 -- Answer here
 
 def apply_n {α : Type} : (α → α) → α → Nat → α  
-| f, a, 0 => _
-| f, a, (n' + 1) => _
+| f, a, 0 => a
+| f, a, (n' + 1) => apply_n f (f a) n'
 
 -- Test cases: confirm that expectations are correct
 
@@ -81,8 +87,8 @@ of the list.
 -/
 
 def len {α : Type} : List α → Nat
-| _ => _
-| h::t => _
+| [] => 0
+| h::t => 1 + len t
 
 #eval @len Nat []                   -- expect 0
 #eval len [0,1,2]                   -- expect 3
@@ -107,8 +113,8 @@ be for your function to work in all cases.
 -/
 
 def reduce_and : List Bool → Bool
-| _ => _
-| _ => and _ _
+| [] => true
+| h::t => and h (reduce_and t)
 
 -- Test cases
 
@@ -131,7 +137,7 @@ should return [false, true].
 
 def map_not : List Bool → List Bool 
 | [] => []
-| h::t => _   -- hint: use :: to construct answer
+| h::t => not h :: map_not t   -- hint: use :: to construct answer
 
 -- test cases
 #eval map_not []              -- exect []
@@ -146,7 +152,9 @@ of all the natural numbers from *n* to *0*, inclusive.
 -/
 
 -- Your answer here
-
+def countdown : Nat → List Nat
+| 0=> [0]
+| n'+ 1=> (n'+1) :: countdown (n')
 
 
 -- test cases
@@ -168,9 +176,10 @@ this function as an analog of natural number addition.
 
 -- Here
 
-def concat {α : Type} : _
-| [], m => _
-| _, _ =>  _
+def concat {α : Type} : List α → List α → List α 
+| [], m => m
+| m , [] => m
+| h::t , m => h::concat t m
 
 -- Test cases
 
@@ -187,7 +196,8 @@ just that one element.
 -/
 
 -- Here
-
+def pure' {α : Type }: α  → List α 
+|a  => [a]
 #eval pure' "Hi"       -- expect ["Hi"]
 
 
@@ -201,9 +211,14 @@ list on the right. Instead, consider using *concat*.
 -/
 
 -- Answer here:
+def list_rev {α : Type} : List α → List α 
+| [] => []
+| h::t => concat (list_rev t) [h]
 
-
+#eval list_rev [1, 2, 3]
 /-!
+
+
 ## Part 2: Propositional Logic: Syntax and Semantics
 
 Forthcoming as an update to this file.

@@ -249,8 +249,10 @@ defined.
 def e0 := (¬J ∨ ¬C) ⇒ ¬(J ∧ C)
 
 -- YOU DO THE REST
+def e1 := (¬A ∨ ¬B) ⇒ ¬ (A ∧ B)
 
-
+def e2 := ¬(A ∨ B) ⇒ ¬A ∧ ¬B
+def e3 := ¬ A ∧ ¬ B ⇒ ¬(A ∨ B)
 /-!
 ### #4. Implement Syntax and Semantics for Implies and Biimplication
 Next go back and extend our formalism to support the implies connective.

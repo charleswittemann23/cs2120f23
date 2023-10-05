@@ -45,7 +45,7 @@ functions, *fst* and *snd*, where *fst p* returns *f*
 and *snd p* returns *s*.
 
 ### Sum Types
-
+-- Java and Python do not support sum types
 Now whereas a product type contains *both* a value of
 some type, α, *and* a value of some type β, a sum type
 contains *either* a value of some type, α, *or* a value
@@ -90,6 +90,18 @@ inductive Object : Type
 | paper
 | scissors
 
+open Object
+#check rock
+#check paper
+#check scissors
+#check Object
+
+
+
+inductive CSLeng : Type
+| Java
+| Python
+| Lean
 /-!
 Let's look at the elements of this definition:
 - The inductive keyword indicates that we're going to define the set of objects of a new type by giving rules for how those objects can be constructed. 
@@ -146,6 +158,8 @@ def play : Object → Object → Result
 | rock, paper => loses
 | rock, rock => ties
 
+
+#reduce play scissors rock 
 end RPS
 
 /-!
@@ -179,6 +193,14 @@ Here's a definition that will work for us.
 
 inductive Box (α : Type) : Type
 | put (a : α)
+ 
+#check Box --should return type
+def box_containing_zero: Box Nat := Box.put 0
+
+def box_containing_hello : Box String := Box.put "Hello"
+#check Box
+#check (Box) --arrow notation
+#check Box.put
 
 /-!
 Let's explain it.
@@ -221,12 +243,15 @@ both an *implicit* type argument, α, and an *explicit* value
 of that type. In this sense, they behave like the polymorphic
 functions we've already seen. Go back and review the work we
 did on a polymorphic identity function to remind yourself of
-the details. You can see the truth of what we're saying here
+the details. 
+
+
+*****You can see the truth of what we're saying here
 by using #check, with an @ sign to make implicit arguments
-explicit.
+explicit.****
 -/
 
-#check (@put)     -- @put : {α : Type} → α → Box α
+#check (@put)   --STUDY THIS RESULT  -- @put : {α : Type} → α → Box α
 
 /-!
 ### Eliminator
@@ -312,7 +337,7 @@ namespace cs2120
 
 inductive Prod (α β : Type) : Type
 | pair (a : α) (b : β)
-
+--Type → Type → Type
 open Prod 
 
 /-!
@@ -636,7 +661,7 @@ logic of the Lean Prover.
 #check {α β : Type} → (Prod α β) → β
 #check {α β : Type} → α → Sum α β 
 #check {α β : Type} → β → Sum α β 
-#check {α β γ : Type} → Sum α β → (α → γ) → (β → γ) → γ  -- Quiz!
+#check {α β γ : Type} → Sum α β → (α → γ) → (β → γ) → _ -- Quiz!
 
 #check Function.comp
 #check Prod.mk

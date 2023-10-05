@@ -338,6 +338,7 @@ inductive unary_op : Type
 inductive binary_op : Type
 | and
 | or
+|imp 
 
 /-!
 #### Expressions (Sentences) 
@@ -411,7 +412,9 @@ def e4 := (e2 ∧ e3) ∨ e0
 #### Interpretations/Valuations
 -/
 def Interp := var → Bool  -- interp is a type
-
+def implies : Bool → Bool → Bool
+| true, false => false
+| _, _ => true
 -- examples
 def all_true  : Interp := fun _ => true
 def all_false : Interp := fun _ => false
@@ -451,6 +454,7 @@ def eval_un_op : unary_op → (Bool → Bool)
 def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
+| binary_op.imp => implies
 
 /-!
 #### Expressions

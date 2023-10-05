@@ -23,6 +23,8 @@ inductive unary_op : Type
 inductive binary_op : Type
 | and
 | or
+| imp
+|iff 
 
 inductive Expr : Type
 | var_exp (v : var)
@@ -43,6 +45,13 @@ infixr:20 " ⇔ " => Expr.bin_exp binary_op.iff
 /-!
 ### Semantics
 -/
+def implies : Bool → Bool → Bool
+| true, false => false
+| _ , _ => true
+def bi_implication : Bool → Bool → Bool
+| true, true => true 
+| false, false => true 
+| _ , _ => false
 
 def eval_un_op : unary_op → (Bool → Bool)
 | unary_op.not => not
@@ -50,6 +59,8 @@ def eval_un_op : unary_op → (Bool → Bool)
 def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
+| binary_op.imp => implies
+| binary_op.iff => bi_implication
 
 def Interp := var → Bool  
 
@@ -216,13 +227,16 @@ def A := {a}
 | Sum.inl nojam => fun( a, b) => nojam a
 | Sum.inr nocheese =>fun( a, b) => nocheese b
 -/ 
-def e0 := (¬J ∨ ¬C) ⇒ ¬ (J ∨ C)
+def e0 := (¬J ∨ ¬C) ⇒  ¬(J ∨ C)
+
 /-!
 ### Compound Propositions
 
 Now redefine the function names in HW5 in propositional logic (Expr)
 -/
-
+def e1 := (¬ A ∨ ¬ B) ⇒ ¬ (A ∧ B)
+def e2 := ¬ (A ∨ B) ⇒ (¬A ∧ ¬ B)
+def e3 := (¬ A ∧ ¬ B) ⇒ ¬ (A ∨ B)
 /-!
 ### Implement Syntax and Semantics for Implies and Biimplication
 Next go back and extend our formalism to support the implies connective.
@@ -237,6 +251,17 @@ interpretations.
 -/
 
 
+-- examples
+def all_true  : Interp := fun _ => true
+def all_false : Interp := fun _ => false
+#eval  eval_expr e0 all_true
+#eval eval_expr e0 all_false
+#eval eval_expr e1 all_true
+#eval eval_expr e1 all_false
+#eval eval_expr e2 all_true
+#eval eval_expr e2  all_false
+#eval eval_expr e3 all_true
+#eval eval_expr e3 all_false
 /-!
 ### Evaluate the Expressions Under Some Other Interpretation
 
@@ -244,3 +269,14 @@ Define an interpretation other than these two and evaluate the propositions
 under this new interpretation.
 -/
 
+def a_true : Interp :=
+ fun a => (a.n %2 ==0)
+
+#eval  eval_expr e0 a_true --expect false
+#eval eval_expr e0 a_true -- expect false
+#eval eval_expr e1 a_true --expect true
+#eval eval_expr e1 a_true
+#eval eval_expr e2 a_true
+#eval eval_expr e2 a_true
+#eval eval_expr e3 a_true
+#eval eval_expr e3 a_true
