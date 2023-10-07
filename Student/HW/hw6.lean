@@ -223,3 +223,29 @@ def list_rev {α : Type} : List α → List α
 
 Forthcoming as an update to this file.
 -/
+
+def fact: Nat → Nat
+| 0=> 1
+| n'+1 => (n' + 1) * fact n'
+
+def list_len {α : Type }: List α → Nat
+|[] => 0
+| h::t => 1+ list_len t
+
+def sum_cubes : List Nat → Nat
+| [] => 0
+| h::t => h^3 + sum_cubes t
+
+#eval sum_cubes [0,1,2,3,4,5]
+--is every purple giraffe hungry?!
+def sentence_maker : List String → String
+| [] => "!"
+| h::t => String.append h (String.append " " (sentence_maker t))
+
+#eval sentence_maker ["Hi", "my", "name", "is", "Charlie"]
+#eval list_len [true, true, false]
+
+def is_even: Nat→ Bool
+| 0=> true
+| 1 => false
+| (n'+2) => is_even (n')

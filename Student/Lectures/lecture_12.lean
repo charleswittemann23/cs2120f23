@@ -275,8 +275,6 @@ def a_true : Interp :=
 #eval  eval_expr e0 a_true --expect false
 #eval eval_expr e0 a_true -- expect false
 #eval eval_expr e1 a_true --expect true
-#eval eval_expr e1 a_true
-#eval eval_expr e2 a_true
-#eval eval_expr e2 a_true
-#eval eval_expr e3 a_true
-#eval eval_expr e3 a_true
+#eval eval_expr e2 a_true -- expect true
+
+#eval eval_expr e3 a_true -- expect true

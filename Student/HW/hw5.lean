@@ -206,10 +206,9 @@ cases? Match to destructure them then return the right
 result *in each case*.
 -/
 def nat_le : Nat → Nat → Bool
-|0, 0 => false
-| Nat.succ (n') , 0 => false
-| 0, Nat.succ (n') => true
-| n'+1 , m'+1 => nat_le n' m' 
+| 0, _ => true
+| n' + 1, 0 => false
+| (n' + 1), (m' + 1) => nat_le n' m'
 -- Here
 #reduce nat_le 3 3
 #reduce nat_le 10 14
@@ -269,7 +268,7 @@ to and including n.
 -/
 
 def sum_f : (Nat → Nat) → Nat → Nat 
-| f, 0 => 0
+| f, 0 => f 0
 | f, n' + 1 => (add (f (n'+1)) (sum_f f n') )
 def square : Nat → Nat
 | n => n*n
