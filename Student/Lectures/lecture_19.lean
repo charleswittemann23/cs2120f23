@@ -21,6 +21,9 @@ that if given any *x* you can produce and return a proof of *P x*.
 
 example : ∀ (n : N) , True := fun n => True.intro
  example : ∃ (n: Nat), True := ⟨ 3, True.intro ⟩
+
+
+ 
 /-
 Wow, a proof for a forall propisition is
 really just a proof that for any arbitrarily
